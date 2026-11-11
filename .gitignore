@@ -1,0 +1,15 @@
+# Documentos da marca e materiais originais (ficam fora do repositório público)
+*.pdf
+*.docx
+/*.PNG
+/*.png
+/*.jpg
+/*.jpeg
+/*.HEIC
+/*.heic
+
+# Ferramentas locais
+.claude/
+.vercel/
+.env*
+node_modules/
