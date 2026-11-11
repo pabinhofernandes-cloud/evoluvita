@@ -377,8 +377,8 @@ em { font-style: italic; font-weight: 500; }
 .hero-media picture { display: block; width: 100%; height: 100%; }
 .hero-media img { object-position: 50% 22%; }
 @media (min-width: 900px) {
-  .hero-media picture { width: 110%; margin-left: 0; }
-  .hero-media img { object-position: 62% 28%; }
+  .hero-media picture { width: 100%; margin-left: 0; }
+  .hero-media img { object-position: 44% 0%; }
   .hero-in .display { max-width: 15ch; text-wrap: balance; font-size: clamp(56px, min(6.6vw, 11svh), 104px); line-height: .98; }
   .hero-lead { max-width: 34ch; }
 }
@@ -387,7 +387,7 @@ em { font-style: italic; font-weight: 500; }
   .hero { background: var(--cafe-escuro); padding-top: 41svh; padding-bottom: 40px; min-height: 0; }
   .hero-media { bottom: auto; height: 54svh; }
   .hero-media img { height: calc(100% + 1px); }
-  .hero-media img { object-position: 70% 20%; }
+  .hero-media img { object-position: 76% 0%; }
   .hero::after {
     bottom: auto; height: calc(54svh + 3px);
     background:
@@ -588,3 +588,116 @@ a.btn[href*="wa.me"]:hover,
 .plain { display: grid; gap: 12px; perspective: 1000px; }
 .plain li.card { padding: 20px 22px; border-top: 1px solid rgba(207, 197, 184, .22); }
 .plain li.card:last-child { border-bottom: 1px solid rgba(207, 197, 184, .22); }
+
+/* Depoimentos */
+.quotes { display: grid; gap: 16px; perspective: 1000px; }
+@media (min-width: 760px) { .quotes { grid-template-columns: 1fr 1fr; gap: 20px; } }
+.quote { margin: 0; padding: 40px 30px 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+.quote::after {
+  content: "\201C"; position: absolute; top: -6px; left: 22px;
+  font: 500 96px/1 var(--serif); color: var(--taupe-claro); pointer-events: none;
+}
+.quote blockquote { margin: 0; position: relative; }
+.quote blockquote p { font: italic 500 clamp(22px, 2.1vw, 27px)/1.35 var(--serif); color: var(--cafe-escuro); }
+.quote figcaption { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--cafe); }
+.quote figcaption::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+#depoimentos .note { margin-top: 24px; }
+
+/* Missão, Visão e Valores: cartões estáticos, sem animação (pedido da cliente) */
+.mvv > .card-static { background: var(--branco-quente); border: 1px solid var(--taupe-claro); border-radius: 16px; }
+
+/* Galeria "Atendimento real": a foto sob o mouse cresce e as outras recuam */
+@media (hover: hover) and (pointer: fine) {
+  .gallery .photo {
+    position: relative; z-index: 1;
+    transition: scale .6s var(--ease-acolhe), opacity .6s var(--ease-acolhe), box-shadow .6s var(--ease-acolhe), filter .6s var(--ease-acolhe);
+    cursor: zoom-in;
+  }
+  .gallery:hover .photo { scale: .96; opacity: .7; filter: saturate(.8); }
+  .gallery .photo:hover {
+    scale: 1.1; opacity: 1; filter: none; z-index: 3;
+    box-shadow: 0 30px 60px -24px rgba(46, 37, 31, .55);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery:hover .photo, .gallery .photo:hover { scale: 1; }
+}
+
+/* =========================================================
+   FIO CONDUTOR — linha que desce pelas seções com a rolagem
+   ========================================================= */
+.thread { position: absolute; top: 0; left: 0; width: 100%; height: 0; overflow: visible; pointer-events: none; z-index: 5; }
+.thread path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.thread-track { stroke: var(--taupe-claro); stroke-width: 1; opacity: .35; stroke-dasharray: 2 7; }
+.thread-line { stroke: var(--taupe); stroke-width: 2; }
+.thread-dot { fill: var(--taupe); stroke: var(--marfim); stroke-width: 2.5; }
+.thread-dot-glow { fill: var(--taupe); opacity: .22; animation: thread-pulse 2.4s var(--ease-respira) infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes thread-pulse { 0%, 100% { transform: scale(.7); opacity: .28; } 50% { transform: scale(1.35); opacity: .08; } }
+.thread.is-dark-zone .thread-line { stroke: var(--taupe-claro); }
+@media (max-width: 899px) {
+  .thread-line { stroke-width: 1.6; }
+  .thread-dot { r: 5; }
+}
+@media (prefers-reduced-motion: reduce) { .thread-dot, .thread-dot-glow { display: none; } }
+/* o fio passa por trás da faixa de palavras */
+.marquee { position: relative; z-index: 6; }
+
+
+/* Missão, Visão e Valores: só texto, suave e delicado */
+.mvv { gap: 40px; margin-top: clamp(80px, 10vw, 130px); }
+.mvv > .mvv-item { padding: 0; border: 0; background: none; }
+.mvv-item h3 {
+  position: relative; margin-bottom: 14px; padding-top: 22px;
+  font: italic 500 clamp(26px, 2.4vw, 32px)/1.2 var(--serif); color: var(--cafe);
+}
+.mvv-item h3::before { content: ""; position: absolute; top: 0; left: 0; width: 36px; height: 1px; background: var(--taupe); opacity: .7; }
+.mvv-item p { font-size: 17px; line-height: 1.75; color: var(--cafe); opacity: .88; max-width: 34ch; }
+@media (min-width: 900px) {
+  .mvv { gap: 0; }
+  .mvv > .mvv-item { padding: 0 40px; border-left: 1px solid rgba(207, 197, 184, .7); }
+  .mvv > .mvv-item:first-child { padding-left: 0; border-left: 0; }
+}
+
+/* títulos: quebra de linha equilibrada, sem palavra sozinha na última linha */
+.h2, .display, .display-2 { text-wrap: balance; }
+.nowrap { white-space: nowrap; }
+
+/* Hero v3 espelhada: cena à direita, título à esquerda (como antes) */
+@media (min-width: 900px) {
+  .hero-media img { object-position: 0% 70%; }
+  .hero-in .display { max-width: 15ch; }
+}
+@media (max-width: 899px) { .hero-media img { object-position: 62% 0%; } }
+
+/* "O que dizem as famílias": foto da sala ao fundo + cartões de vidro fosco */
+.testimonials { position: relative; overflow: hidden; isolation: isolate; background: var(--marfim); }
+.testimonials-bg { position: absolute; inset: 0; z-index: -1; }
+.testimonials-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
+.testimonials-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(243, 239, 231, .92) 0%, rgba(243, 239, 231, .55) 30%, rgba(243, 239, 231, .25) 60%, rgba(243, 239, 231, .7) 100%);
+}
+.testimonials .quote[data-card] {
+  background: rgba(251, 249, 245, .42);
+  border: 1px solid rgba(255, 255, 255, .55);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: 0 20px 50px -30px rgba(63, 51, 42, .45), inset 0 1px 0 rgba(255, 255, 255, .5);
+}
+.testimonials .quote[data-card]:hover { background: rgba(251, 249, 245, .58); border-color: rgba(255, 255, 255, .8); }
+.testimonials .quote::after { color: rgba(255, 255, 255, .85); }
+.testimonials .note { color: var(--cafe-escuro); }
+@media (max-width: 759px) { .testimonials-bg img { object-position: 30% 60%; } }
+
+/* Hero: foto deslocada para a direita (corta o braço da cadeira) e texto livre sobre a área escura */
+@media (min-width: 900px) {
+  .hero { background: var(--cafe-noite); }
+  .hero-media picture { margin-left: min(12.5vw, 250px); width: calc(100% - min(12.5vw, 250px)); }
+  .hero-media img {
+    object-position: 0% 70%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 16%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 16%);
+  }
+}
+

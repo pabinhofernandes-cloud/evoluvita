@@ -193,6 +193,101 @@
     }
   });
 
+  /* ---------- Fio condutor: linha que se desenha com a rolagem ---------- */
+  function setupThread() {
+    const svg = document.querySelector('[data-thread]');
+    if (!svg) return;
+    const track = svg.querySelector('.thread-track');
+    const line = svg.querySelector('.thread-line');
+    const dot = svg.querySelector('.thread-dot');
+    const glow = svg.querySelector('.thread-dot-glow');
+    const hero = document.querySelector('.hero');
+    const end = document.querySelector('#contato');
+    const sections = Array.from(document.querySelectorAll('main > section')).filter((s) => s !== hero && s !== end && !s.classList.contains('hero'));
+    let total = 0, table = [], startY = 0, endY = 0, ticking = false;
+
+    const pageY = (el) => el.getBoundingClientRect().top + window.scrollY;
+
+    function build() {
+      const W = document.documentElement.clientWidth;
+      const docH = document.documentElement.scrollHeight;
+      svg.setAttribute('viewBox', `0 0 ${W} ${docH}`);
+      svg.style.height = docH + 'px';
+      const gutter = Math.max(14, Math.min(40, (W - 1240) / 2 + 22, W * 0.035));
+      const L = gutter, R = W - gutter;
+      const pad = W < 900 ? 46 : 70;
+
+      // começa no fim do hero, no centro
+      startY = pageY(hero) + hero.offsetHeight - 30;
+      let d = `M ${W / 2} ${startY}`;
+      let side = 0; // 0 = esquerda, 1 = direita
+      let prevX = W / 2, prevY = startY;
+      sections.forEach((sec) => {
+        const top = pageY(sec), bottom = top + sec.offsetHeight;
+        const x = side === 0 ? L : R;
+        const y1 = top + pad, y2 = bottom - pad;
+        // curva até a lateral desta seção (cruza no respiro entre seções)
+        const my = (prevY + y1) / 2;
+        d += ` C ${prevX} ${my}, ${x} ${my}, ${x} ${y1}`;
+        d += ` L ${x} ${y2}`;
+        prevX = x; prevY = y2; side = 1 - side;
+      });
+      // termina no início do contato, no centro
+      endY = pageY(end) + 40;
+      const my = (prevY + endY) / 2;
+      d += ` C ${prevX} ${my}, ${W / 2} ${my}, ${W / 2} ${endY}`;
+
+      track.setAttribute('d', d);
+      line.setAttribute('d', d);
+      total = line.getTotalLength();
+      line.style.strokeDasharray = `${total} ${total}`;
+
+      // tabela comprimento -> y para achar o ponto da linha na altura da tela
+      table = [];
+      const N = 600;
+      for (let i = 0; i <= N; i++) {
+        const len = (total * i) / N;
+        table.push([len, line.getPointAtLength(len).y]);
+      }
+      update();
+    }
+
+    function lengthAtY(y) {
+      if (y <= table[0][1]) return 0;
+      let best = 0;
+      for (let i = 0; i < table.length; i++) {
+        if (table[i][1] <= y) best = table[i][0];
+        else if (table[i][1] > y + 400) break;
+      }
+      return best;
+    }
+
+    function update() {
+      ticking = false;
+      if (!total) return;
+      const anchorY = window.scrollY + window.innerHeight * (reduce ? 10 : 0.62);
+      const len = reduce ? total : lengthAtY(anchorY);
+      line.style.strokeDashoffset = String(total - len);
+      const pt = line.getPointAtLength(Math.max(0.01, len));
+      const visible = len > 2 && len < total - 1;
+      [dot, glow].forEach((c) => { c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y); c.style.opacity = visible ? '' : '0'; });
+      // linha mais clara quando atravessa seções escuras
+      const darkHere = Array.from(document.querySelectorAll('main [data-surface="dark"]')).some((s) => {
+        const t = pageY(s); return pt.y >= t && pt.y <= t + s.offsetHeight;
+      });
+      svg.classList.toggle('is-dark-zone', darkHere);
+    }
+
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    let rT; const onResize = () => { clearTimeout(rT); rT = setTimeout(build, 150); };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('load', build);
+    if ('ResizeObserver' in window) new ResizeObserver(onResize).observe(document.body);
+    build();
+  }
+  setupThread();
+
   const year = document.querySelector('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
 

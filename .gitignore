@@ -13,3 +13,6 @@
 .vercel/
 .env*
 node_modules/
+
+# imagens de trabalho (originais) dentro de assets
+assets/**/*.jpg
