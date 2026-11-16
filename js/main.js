@@ -210,6 +210,9 @@
 
     function build() {
       const W = document.documentElement.clientWidth;
+      // zera a altura do próprio SVG antes de medir: senão ele "segura" a página
+      // na altura antiga e sobra um espaço vazio abaixo do rodapé quando ela encolhe
+      svg.style.height = '0px';
       const docH = document.documentElement.scrollHeight;
       svg.setAttribute('viewBox', `0 0 ${W} ${docH}`);
       svg.style.height = docH + 'px';

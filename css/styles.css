@@ -291,12 +291,15 @@ em { font-style: italic; font-weight: 500; }
 .footer-logo { width: 300px; max-width: 100%; }
 .footer-cols { display: grid; gap: 32px; }
 .footer h3 { font: 600 13px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--taupe-claro); margin-bottom: 14px; }
-.footer a { display: block; text-decoration: none; padding: 6px 0; }
+.footer a { display: block; text-decoration: none; padding: 6px 0; overflow-wrap: anywhere; }
 .footer a:hover { color: var(--marfim); text-decoration: underline; text-underline-offset: 4px; }
 .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(207, 197, 184, .2); font-size: 13px; color: rgba(243, 239, 231, .65); }
 @media (min-width: 900px) {
-  .footer-in { grid-template-columns: 300px 1fr; }
-  .footer-cols { grid-template-columns: repeat(3, 1fr); }
+  .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+/* logo ao lado das colunas só quando há largura para o e-mail caber inteiro */
+@media (min-width: 1200px) {
+  .footer-in { grid-template-columns: 300px minmax(0, 1fr); }
 }
 
 /* WhatsApp flutuante */
