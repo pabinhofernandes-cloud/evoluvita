@@ -288,6 +288,41 @@
   }
   setupThread();
 
+  /* ---------- Profundidade na rolagem: galeria em "escada" e foto do contato que assenta ---------- */
+  function setupDepth() {
+    if (reduce) return;
+    const group = document.querySelector('[data-depth-group]');
+    const items = group ? Array.from(group.querySelectorAll('[data-depth]')) : [];
+    const settle = document.querySelector('[data-settle]');
+    if (!items.length && !settle) return;
+    const desktop = window.matchMedia('(min-width: 900px)');
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      if (group && desktop.matches) {
+        const r = group.getBoundingClientRect();
+        if (r.bottom > -200 && r.top < vh + 200) {
+          // -1 quando a galeria entra por baixo, 0 no centro da tela, 1 quando sai por cima
+          const p = clamp((vh - r.top) / (vh + r.height), 0, 1) * 2 - 1;
+          items.forEach((el) => el.style.setProperty('--depth-y', `${(Number(el.dataset.depth) * p).toFixed(1)}px`));
+        }
+      }
+      if (settle) {
+        const top = settle.parentElement.getBoundingClientRect().top;
+        const p = clamp((vh - top) / vh, 0, 1);
+        settle.style.setProperty('--settle', (1.12 - 0.12 * p).toFixed(4));
+      }
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+  setupDepth();
+
   const year = document.querySelector('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
 
