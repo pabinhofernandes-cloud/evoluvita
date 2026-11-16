@@ -204,7 +204,7 @@
     const hero = document.querySelector('.hero');
     const end = document.querySelector('#contato');
     const sections = Array.from(document.querySelectorAll('main > section')).filter((s) => s !== hero && s !== end && !s.classList.contains('hero'));
-    let total = 0, table = [], startY = 0, endY = 0, ticking = false;
+    let total = 0, table = [], startY = 0, endY = 0, ticking = false, lastKey = '';
 
     const pageY = (el) => el.getBoundingClientRect().top + window.scrollY;
 
@@ -212,8 +212,13 @@
       const W = document.documentElement.clientWidth;
       // zera a altura do próprio SVG antes de medir: senão ele "segura" a página
       // na altura antiga e sobra um espaço vazio abaixo do rodapé quando ela encolhe
+      const prevH = svg.style.height;
       svg.style.height = '0px';
       const docH = document.documentElement.scrollHeight;
+      // nada mudou desde o último cálculo: não refaz (evita trabalho repetido ao abrir a página)
+      const key = `${W}x${docH}x${Math.round(pageY(end))}`;
+      if (key === lastKey) { svg.style.height = prevH; return; }
+      lastKey = key;
       svg.setAttribute('viewBox', `0 0 ${W} ${docH}`);
       svg.style.height = docH + 'px';
       const gutter = Math.max(14, Math.min(40, (W - 1240) / 2 + 22, W * 0.035));
@@ -223,6 +228,19 @@
       // começa no fim do hero, no centro
       startY = pageY(hero) + hero.offsetHeight - 30;
       let d = `M ${W / 2} ${startY}`;
+      // tabela [comprimento, y, x] calculada aqui mesmo com a fórmula da curva:
+      // bem mais leve que pedir 600 pontos ao navegador com getPointAtLength
+      table = [[0, startY, W / 2]];
+      let acc = 0, px = W / 2, py = startY;
+      const push = (x, y) => { acc += Math.hypot(x - px, y - py); px = x; py = y; table.push([acc, y, x]); };
+      const curve = (x0, y0, x1, y1, x2, y2, x3, y3) => {
+        const STEPS = 24;
+        for (let i = 1; i <= STEPS; i++) {
+          const t = i / STEPS, u = 1 - t;
+          const a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, e = t * t * t;
+          push(a * x0 + b * x1 + c * x2 + e * x3, a * y0 + b * y1 + c * y2 + e * y3);
+        }
+      };
       let side = 0; // 0 = esquerda, 1 = direita
       let prevX = W / 2, prevY = startY;
       sections.forEach((sec) => {
@@ -232,46 +250,47 @@
         // curva até a lateral desta seção (cruza no respiro entre seções)
         const my = (prevY + y1) / 2;
         d += ` C ${prevX} ${my}, ${x} ${my}, ${x} ${y1}`;
+        curve(prevX, prevY, prevX, my, x, my, x, y1);
         d += ` L ${x} ${y2}`;
+        push(x, y2);
         prevX = x; prevY = y2; side = 1 - side;
       });
       // termina no início do contato, no centro
       endY = pageY(end) + 40;
       const my = (prevY + endY) / 2;
       d += ` C ${prevX} ${my}, ${W / 2} ${my}, ${W / 2} ${endY}`;
+      curve(prevX, prevY, prevX, my, W / 2, my, W / 2, endY);
 
       track.setAttribute('d', d);
       line.setAttribute('d', d);
       total = line.getTotalLength();
       line.style.strokeDasharray = `${total} ${total}`;
-
-      // tabela comprimento -> y para achar o ponto da linha na altura da tela
-      table = [];
-      const N = 600;
-      for (let i = 0; i <= N; i++) {
-        const len = (total * i) / N;
-        table.push([len, line.getPointAtLength(len).y]);
-      }
+      // ajusta a tabela ao comprimento exato que o navegador usa no traço
+      const k = acc ? total / acc : 1;
+      table.forEach((r) => { r[0] *= k; });
       update();
     }
 
-    function lengthAtY(y) {
-      if (y <= table[0][1]) return 0;
-      let best = 0;
-      for (let i = 0; i < table.length; i++) {
-        if (table[i][1] <= y) best = table[i][0];
-        else if (table[i][1] > y + 400) break;
-      }
-      return best;
+    // ponto da linha na altura y (interpolado na tabela): comprimento e x
+    function pointAtY(y) {
+      if (y <= table[0][1]) return { len: 0, x: table[0][2], y: table[0][1] };
+      let i = 1;
+      while (i < table.length && table[i][1] <= y) i++;
+      // a linha só desce: o último trecho que ainda está acima de y é o ponto atual
+      const a = table[i - 1], b = table[i];
+      if (!b || b[1] === a[1]) return { len: a[0], x: a[2], y: a[1] };
+      const t = (y - a[1]) / (b[1] - a[1]);
+      return { len: a[0] + (b[0] - a[0]) * t, x: a[2] + (b[2] - a[2]) * t, y };
     }
 
     function update() {
       ticking = false;
       if (!total) return;
       const anchorY = window.scrollY + window.innerHeight * (reduce ? 10 : 0.62);
-      const len = reduce ? total : lengthAtY(anchorY);
+      const hit = reduce ? { len: total, x: table[table.length - 1][2], y: table[table.length - 1][1] } : pointAtY(anchorY);
+      const len = hit.len;
       line.style.strokeDashoffset = String(total - len);
-      const pt = line.getPointAtLength(Math.max(0.01, len));
+      const pt = { x: hit.x, y: hit.y };
       const visible = len > 2 && len < total - 1;
       [dot, glow].forEach((c) => { c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y); c.style.opacity = visible ? '' : '0'; });
       // linha mais clara quando atravessa seções escuras
