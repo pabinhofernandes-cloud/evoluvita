@@ -295,7 +295,8 @@ em { font-style: italic; font-weight: 500; }
 .footer a:hover { color: var(--marfim); text-decoration: underline; text-underline-offset: 4px; }
 .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(207, 197, 184, .2); font-size: 13px; color: rgba(243, 239, 231, .65); }
 @media (min-width: 900px) {
-  .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* colunas do tamanho do conteúdo: e-mail e CREFITO cabem numa linha só */
+  .footer-cols { grid-template-columns: repeat(3, auto); justify-content: space-between; }
 }
 /* logo ao lado das colunas só quando há largura para o e-mail caber inteiro */
 @media (min-width: 1200px) {
