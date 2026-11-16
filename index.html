@@ -6,25 +6,40 @@
 <title>EvoluVita | Fisioterapia domiciliar para idosos em Balneário Camboriú, Camboriú e Itajaí</title>
 <meta name="description" content="Fisioterapia especializada no envelhecimento, no conforto de casa. Avaliação específica, plano individualizado e acompanhamento próximo da família em Balneário Camboriú, Camboriú e Itajaí (SC).">
 <meta name="theme-color" content="#F3EFE7">
+<!-- endereço oficial do site: se mudar para um domínio próprio, trocar aqui, no og:url/og:image, no JSON-LD, em robots.txt e em sitemap.xml -->
+<link rel="canonical" href="https://evoluvita.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="EvoluVita">
+<meta property="og:url" content="https://evoluvita.vercel.app/">
 <meta property="og:title" content="EvoluVita | Fisioterapia especializada no envelhecimento">
 <meta property="og:description" content="Fisioterapia domiciliar para pessoas idosas em Balneário Camboriú, Camboriú e Itajaí.">
-<meta property="og:image" content="assets/img/hero-1700.webp?v=4">
+<meta property="og:image" content="https://evoluvita.vercel.app/og/evoluvita-1200x630.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fisioterapeuta segurando as mãos de uma paciente idosa em pé, na sala de casa">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/brand/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/img/hero-1700.webp?v=4" imagesrcset="assets/img/hero-900.webp?v=4 900w, assets/img/hero-1700.webp?v=4 1700w" imagesizes="100vw">
-<link rel="stylesheet" href="css/styles.css?v=50">
+<link rel="preload" as="image" fetchpriority="high" href="assets/img/hero-1700.webp?v=4" imagesrcset="assets/img/hero-900.webp?v=4 900w, assets/img/hero-1700.webp?v=4 1700w" imagesizes="100vw">
+<link rel="stylesheet" href="css/styles.css?v=51">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Physiotherapy",
+  "@id": "https://evoluvita.vercel.app/#evoluvita",
   "name": "EvoluVita — Fisioterapia especializada no envelhecimento",
   "description": "Fisioterapia domiciliar para pessoas idosas, com avaliação específica, plano individualizado, acompanhamento da evolução e orientação aos familiares.",
+  "url": "https://evoluvita.vercel.app/",
+  "image": "https://evoluvita.vercel.app/og/evoluvita-1200x630.jpg",
+  "logo": "https://evoluvita.vercel.app/assets/brand/logo-evoluvita.webp",
   "medicalSpecialty": "Physiotherapy",
   "telephone": "+55 47 99252-1039",
+  "email": "evoluvitafisioterapia@gmail.com",
+  "sameAs": ["https://www.instagram.com/marianacampao/"],
   "areaServed": ["Balneário Camboriú", "Camboriú", "Itajaí"],
   "address": {"@type": "PostalAddress", "addressRegion": "SC", "addressCountry": "BR"},
   "founder": {"@type": "Person", "name": "Mariana Alves Campão", "jobTitle": "Fisioterapeuta, CREFITO-10 187677"}
@@ -37,8 +52,8 @@
 <header class="site-header" data-header>
   <div class="wrap header-in">
     <a class="brand" href="#topo" aria-label="EvoluVita, início">
-      <img class="brand-dark" src="assets/brand/logo-evoluvita.webp" width="995" height="627" alt="EvoluVita">
-      <img class="brand-light" src="assets/brand/logo-evoluvita-light.webp" width="995" height="627" alt="" aria-hidden="true">
+      <img class="brand-dark" src="assets/brand/logo-evoluvita-300.webp" srcset="assets/brand/logo-evoluvita-300.webp 300w, assets/brand/logo-evoluvita.webp 995w" sizes="(min-width: 900px) 99px, 83px" width="995" height="627" alt="EvoluVita">
+      <img class="brand-light" src="assets/brand/logo-evoluvita-light-300.webp" srcset="assets/brand/logo-evoluvita-light-300.webp 300w, assets/brand/logo-evoluvita-light.webp 995w" sizes="(min-width: 900px) 99px, 83px" width="995" height="627" alt="" aria-hidden="true">
     </a>
     <nav class="nav" aria-label="Principal">
       <a href="#quando">Quando procurar</a>
@@ -346,7 +361,7 @@
   <circle class="thread-dot" r="6"/>
 </svg>
 
-<a class="wa-float" href="https://wa.me/5547992521039?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20domiciliar." target="_blank" rel="noopener" data-wa>
+<a class="wa-float" href="https://wa.me/5547992521039?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20domiciliar." target="_blank" rel="noopener" aria-label="Falar no WhatsApp" data-wa>
   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whats"/></svg><span>Falar no WhatsApp</span>
 </a>
 
@@ -355,6 +370,6 @@
   <symbol id="i-insta" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.2.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.2.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.2-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.2-.4 1.3-.1 1.6-.1 4.8-.1M12 0C8.7 0 8.3 0 7.1.1 5.8.1 4.9.3 4.1.6c-.8.3-1.5.7-2.1 1.4C1.3 2.6.9 3.3.6 4.1.3 4.9.1 5.8.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.1 1.3.3 2.2.6 2.9.3.8.7 1.5 1.4 2.1.7.7 1.3 1.1 2.1 1.4.8.3 1.6.5 2.9.6 1.3.1 1.7.1 4.9.1s3.7 0 4.9-.1c1.3-.1 2.2-.3 2.9-.6.8-.3 1.5-.7 2.1-1.4.7-.7 1.1-1.3 1.4-2.1.3-.8.5-1.6.6-2.9.1-1.3.1-1.7.1-4.9s0-3.7-.1-4.9c-.1-1.3-.3-2.2-.6-2.9-.3-.8-.7-1.5-1.4-2.1C21.4 1.3 20.7.9 19.9.6 19.1.3 18.2.1 16.9.1 15.7 0 15.3 0 12 0Zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4ZM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9Z"/></symbol>
 </svg>
 
-<script src="js/main.js?v=26" defer></script>
+<script src="js/main.js?v=27" defer></script>
 </body>
 </html>
