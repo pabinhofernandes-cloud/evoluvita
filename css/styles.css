@@ -920,3 +920,6 @@ a.btn[href*="wa.me"]:hover,
 .testimonials .review-head .review-stars { flex-basis: 100%; margin: 6px 0 0; font-size: 16px; letter-spacing: 1px; }
 .testimonials .quote blockquote p { font: 400 15.5px/1.6 var(--sans); color: #3c4043; }
 @media (min-width: 900px) { .testimonials .quote blockquote p { font-size: 16px; } }
+
+/* Hero: link "Como funciona" sem sublinhado */
+.hero .link-light { text-decoration: none; }
